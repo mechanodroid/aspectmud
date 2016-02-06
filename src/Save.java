@@ -25,10 +25,15 @@ public class Save {
 				   Element node = (Element) list.get(i);
 				   System.out.println("Room Name : " + node.getText());
 				   List itemList = node.getChildren("item");
+				   int posx = Integer.parseInt(node.getChild("position_x").getText());
+				   int posy = Integer.parseInt(node.getChild("position_y").getText());
+				   rooms[posx][posy].setName(node.getText());
+				   rooms[posx][posy].setDescription(node.getChildText("desc"));
+				   rooms[posx][posy].items.clear();
 				   for (int j = 0; j < itemList.size(); j++) {
 					   Element itemNode = (Element) itemList.get(j);
 					   System.out.println("Item Name : " + itemNode.getText());
-
+					   rooms[posx][posy].items.add(new Item(itemNode.getText()));	
 				   }   
 				}
 
@@ -46,6 +51,12 @@ public class Save {
 	        for (int i = 0; i < WIDTH; i++) {
 	            for (int j = 0; j < HEIGHT; j++) {
 	                Element room = new Element("roomname").setText(rooms[i][j].getName());
+                	Element posxElement = new Element("position_x").setText(Integer.toString(i));
+                	Element posyElement = new Element("position_y").setText(Integer.toString(j));
+                	Element descElement = new Element("desc").setText(rooms[i][j].getDescription());
+                	room.addContent(posxElement);
+                	room.addContent(posyElement);
+                	room.addContent(descElement);
 	                for(Item item:rooms[i][j].getItems()) {
 	                	Element itemElement = new Element("item").setText(item.getName());
 	                	room.addContent(itemElement);

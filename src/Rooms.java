@@ -8,9 +8,14 @@ public class Rooms {
                 room[i][j] = new Room(i, "", "", null);
             }
         }
+        
+        return;
+        
+        //no longer needed:
+        /*
 
         room[0][0].setNumber(1);
-        room[0][0].setName("Living Room");
+        room[0][0].setName("Living ");
         room[0][0].setDescription("You are in your living room.");
         room[0][0].setItems(new Item("wallet"));
         room[0][0].setItems(new Item("remote"));
@@ -32,6 +37,7 @@ public class Rooms {
         room[1][1].setDescription("You are in your bathroom.");
         room[1][1].setItems(new Item("toilet paper"));
         room[1][1].setItems(new Item("magazine"));
+        */
     }
 
     public static void print(Room[][] room, int x, int y) {

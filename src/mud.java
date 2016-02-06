@@ -14,11 +14,12 @@ public class mud {
         Rooms.build(room, WIDTH, HEIGHT);
         int x = 0;
         int y = 0;
-        Rooms.print(room, x, y);
         Save newSave = new Save();
         // Load inventory
         ArrayList<Item> inventory = new ArrayList<>();
-
+        newSave.readRooms(room, WIDTH, HEIGHT);
+        Rooms.print(room, x, y);
+        
         // Start game
         boolean playing = true;
         while (playing) {
@@ -76,7 +77,9 @@ public class mud {
                     || input.equals("inventory")) {
                 Inventory.print(inventory);
             }
-            
+            else if (input.equals("save")) {
+                newSave.writeRooms(room, WIDTH, HEIGHT);
+            }            
             // Quit commands
             else if (input.equals("quit")) {
                 System.out.println("Goodbye!");
@@ -86,8 +89,6 @@ public class mud {
             } else {
                 System.out.println("You can't do that.");
             }
-            newSave.writeRooms(room, WIDTH, HEIGHT);
-            newSave.readRooms(room, WIDTH, HEIGHT);
         }
         System.exit(0);
 	}
