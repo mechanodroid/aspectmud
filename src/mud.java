@@ -15,9 +15,11 @@ public class mud {
         int x = 0;
         int y = 0;
         Rooms.print(room, x, y);
+        Save newSave = new Save();
+        newSave.testWrite();
 
         // Load inventory
-        ArrayList<String> inventory = new ArrayList<>();
+        ArrayList<Item> inventory = new ArrayList<>();
 
         // Start game
         boolean playing = true;

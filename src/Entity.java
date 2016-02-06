@@ -3,6 +3,7 @@ public class Entity {
     private int x;
     private int y;
 
+    private String name;
     private String description;
     public Entity() {
     	
@@ -20,6 +21,12 @@ public class Entity {
         return y;
     }
 
+    public String getName() {
+    	return name;
+    }
+    public void setName(String name){
+    	this.name = name;
+    }
     public String getDescription() {
         return description;
     }

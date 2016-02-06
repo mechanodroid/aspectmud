@@ -11,10 +11,10 @@ public class Room extends Entity {
     private int number;
     private String name;
     private String description;
-    public ArrayList<String> items = new ArrayList<>();
+    public ArrayList<Item> items = new ArrayList<>();
 
     public Room(int number, String name, String description,
-            ArrayList<String> items) {
+            ArrayList<Item> items) {
     }
 
     public void setNumber(int number) {
@@ -41,15 +41,21 @@ public class Room extends Entity {
         return this.description;
     }
 
-    public void setItems(String item) {
+    public void setItems(Item item) {
         this.items.add(item);
     }
 
     public void deleteItem(String item) {
-        this.items.remove(item);
+    	for(int i = 0; i<items.size(); i++)
+    	{
+    		if(items.get(i).getName()==item)
+    		{
+    			this.items.remove(i);
+    		}
+    	}
     }
 
-    public ArrayList<String> getItems() {
+    public ArrayList<Item> getItems() {
         return this.items;
     }
 
