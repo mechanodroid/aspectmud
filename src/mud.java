@@ -16,8 +16,6 @@ public class mud {
         int y = 0;
         Rooms.print(room, x, y);
         Save newSave = new Save();
-        newSave.testWrite();
-
         // Load inventory
         ArrayList<Item> inventory = new ArrayList<>();
 
@@ -88,6 +86,8 @@ public class mud {
             } else {
                 System.out.println("You can't do that.");
             }
+            newSave.writeRooms(room, WIDTH, HEIGHT);
+            newSave.readRooms(room, WIDTH, HEIGHT);
         }
         System.exit(0);
 	}

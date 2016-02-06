@@ -1,12 +1,71 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
+import java.util.List;
 
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.JDOMException;
+
 public class Save {
+	public void readRooms(Room[][] rooms, int WIDTH, int HEIGHT)	{
+		  SAXBuilder builder = new SAXBuilder();
+		  File xmlFile = new File("mud.xml");
+		  try {
+
+				Document document = (Document) builder.build(xmlFile);
+				Element rootNode = document.getRootElement();
+				List list = rootNode.getChildren("roomname");
+
+				for (int i = 0; i < list.size(); i++) {
+				   Element node = (Element) list.get(i);
+				   System.out.println("Room Name : " + node.getText());
+				   List itemList = node.getChildren("item");
+				   for (int j = 0; j < itemList.size(); j++) {
+					   Element itemNode = (Element) itemList.get(j);
+					   System.out.println("Item Name : " + itemNode.getText());
+
+				   }   
+				}
+
+			  } catch (IOException io) {
+				System.out.println(io.getMessage());
+			  } catch (JDOMException jdomex) {
+				System.out.println(jdomex.getMessage());
+			  }
+	}
+	public void writeRooms(Room[][] rooms, int WIDTH, int HEIGHT) {
+		try {
+			Element mud = new Element("mud");
+			Document doc = new Document(mud);
+			// Initialize rooms (a 2D array)
+	        for (int i = 0; i < WIDTH; i++) {
+	            for (int j = 0; j < HEIGHT; j++) {
+	                Element room = new Element("roomname").setText(rooms[i][j].getName());
+	                for(Item item:rooms[i][j].getItems()) {
+	                	Element itemElement = new Element("item").setText(item.getName());
+	                	room.addContent(itemElement);
+	                }
+	                doc.getRootElement().addContent(room);
+	            }
+	        }
+	
+			// new XMLOutputter().output(doc, System.out);
+			XMLOutputter xmlOutput = new XMLOutputter();
+	
+			// display nice nice
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(doc, new FileWriter("mud.xml"));
+	
+			System.out.println("Mud File Saved!");
+		} catch (IOException io) {
+			System.out.println(io.getMessage());
+		}
+	}
 	public void testWrite()
 	{
 		try {
