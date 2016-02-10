@@ -1,5 +1,11 @@
 //cross cutting concern: saving state
 
+//notes: anytime a .set .add or .remove happens we are essentially changing state, and the game should be saved
+//therefore detect this and inject code using aspectj
+
+//TODO: must save out current player position
+//TODO: must save out current inventory
+
 import java.util.ArrayList;
 
 public class Room extends Entity {

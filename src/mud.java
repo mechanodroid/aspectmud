@@ -2,23 +2,30 @@ import java.util.ArrayList;
 
 public class mud {
 
+	 public static final int WIDTH = 2;
+     public static final int HEIGHT = 2;
+     public static Room[][] room;
+     public static Save newSave;
+     public static Player playerOne;
 	/**
 	 * @param args
 	 */
+     public static void init() {
+         // Build rooms
+    	 room = new Room[WIDTH][HEIGHT];
+    	 newSave = new Save();
+         Rooms.build(room, WIDTH, HEIGHT);
+    	 playerOne = new Player();
+    	 playerOne.setName("Bob");
+         playerOne.set(0, 0);    	 
+     }
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-        // Build rooms
-        final int WIDTH = 2;
-        final int HEIGHT = 2;
-        Room[][] room = new Room[WIDTH][HEIGHT];
-        Rooms.build(room, WIDTH, HEIGHT);
-        int x = 0;
-        int y = 0;
-        Save newSave = new Save();
+
         // Load inventory
         ArrayList<Item> inventory = new ArrayList<>();
+        init();
         newSave.readRooms(room, WIDTH, HEIGHT);
-        Rooms.print(room, x, y);
+        Rooms.print(room, playerOne);
         
         // Start game
         boolean playing = true;
@@ -28,38 +35,18 @@ public class mud {
 
             // Movement commands
             if (input.equals("n")) {
-                if (y > 0) {
-                    y--;
-                    Rooms.print(room, x, y);
-                } else {
-                    System.out.println("You can't go that way.");
-                }
+                playerOne.GoNorth(room);
             } else if (input.equals("s")) {
-                if (y < HEIGHT - 1) {
-                    y++;
-                    Rooms.print(room, x, y);
-                } else {
-                    System.out.println("You can't go that way.");
-                }
+                playerOne.GoSouth(room);
             } else if (input.equals("e")) {
-                if (x > 0) {
-                    x--;
-                    Rooms.print(room, x, y);
-                } else {
-                    System.out.println("You can't go that way.");
-                }
+                playerOne.GoEast(room);
             } else if (input.equals("w")) {
-                if (x < WIDTH - 1) {
-                    x++;
-                    Rooms.print(room, x, y);
-                } else {
-                    System.out.println("You can't go that way.");
-                }
+                playerOne.GoWest(room);
             }
 
             // Look commands
             else if (input.equals("look")) {
-                Rooms.print(room, x, y);
+                Rooms.print(room, playerOne.getX(), playerOne.getY());
             }
 
             // Get commands
@@ -67,7 +54,7 @@ public class mud {
             	if (input.substring(0, input.indexOf(' ')).equals("get")) {
             		if (input.substring(input.indexOf(' ')).length() > 1) {
             			String item = input.substring(input.indexOf(' ') + 1);
-                    	Inventory.checkItem(x, y, item, inventory, room);
+                    	Inventory.checkItem(playerOne.getX(), playerOne.getY(), item, inventory, room);
             		}	
             	}
             }

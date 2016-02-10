@@ -45,8 +45,8 @@ public class Save {
 	}
 	public void writeRooms(Room[][] rooms, int WIDTH, int HEIGHT) {
 		try {
-			Element mud = new Element("mud");
-			Document doc = new Document(mud);
+			Element mud1 = new Element("mud");
+			Document doc = new Document(mud1);
 			// Initialize rooms (a 2D array)
 	        for (int i = 0; i < WIDTH; i++) {
 	            for (int j = 0; j < HEIGHT; j++) {
@@ -54,6 +54,10 @@ public class Save {
                 	Element posxElement = new Element("position_x").setText(Integer.toString(i));
                 	Element posyElement = new Element("position_y").setText(Integer.toString(j));
                 	Element descElement = new Element("desc").setText(rooms[i][j].getDescription());
+                	Element playerposX = new Element("player_pos_x").setText(Integer.toString(mud.playerOne.getX()));
+                	Element playerposY = new Element("player_pos_y").setText(Integer.toString(mud.playerOne.getY()));
+                	room.addContent(playerposX);
+                	room.addContent(playerposY);
                 	room.addContent(posxElement);
                 	room.addContent(posyElement);
                 	room.addContent(descElement);

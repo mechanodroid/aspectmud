@@ -39,12 +39,15 @@ public class Rooms {
         room[1][1].setItems(new Item("magazine"));
         */
     }
-
-    public static void print(Room[][] room, int x, int y) {
+	public static void print(Room[][] room, int x, int y) {
 
         System.out.println(room[x][y].getDescription());
         System.out.println("You see: " + Rooms.printItems(room, x, y));
         System.out.println();
+    }
+    public static void print(Room[][] room, Player player) {
+
+        Rooms.print(room, player.getX(), player.getY());
     }
     public static String printItems(Room[][] room, int x, int y) {
     	String buildString = "";
