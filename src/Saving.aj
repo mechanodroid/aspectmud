@@ -13,6 +13,7 @@ class ItemSave {
 }
 class PlayerSave {
 	public static ArrayList<Player> players;
+	
 }
 class RoomSave {
 	public static ArrayList<Room> rooms;
@@ -28,15 +29,15 @@ public aspect Saving {
         System.out.println("save now!"); 
         mud.newSave.writeRooms(mud.room, mud.WIDTH, mud.HEIGHT);
     }*/
+
     
-    pointcut location_sets(Player p1, int val): target(p1) && 
+    pointcut location_setX(Player p1, int val): target(p1) && 
     											args(val) &&
-    											(call(void setX(int)) || 
-    											 call(void setY(int)));
+    											call(void setX(int));
     
     
 
-    after(): location_sets(Player, int) { 
+    after(): location_setX(Player, int) { 
         System.out.println("int argument"+(int)thisJoinPoint.getArgs()[0]); 
         System.out.println("player argument"+((Player)thisJoinPoint.getTarget()).getName()); 
         //for player, take it and write out to a temp structure, which
@@ -49,9 +50,18 @@ public aspect Saving {
             ArrayList<Item>, Room[][]));
     pointcut checkItem(): call(void Rooms.removeItem(Room[][], int, int, String));
 
-    before() : checkItem() && cflow(mud_()) && cflow(inventory_()) && !within(Saving) {
+    before() : checkItem() && cflow(mud_()) && cflow(inventory_()) && !within(Saving)  {
         System.out.println("getting item!!!");
+    	Object fromJoin = thisJoinPoint.getArgs()[3];
+        Item itemToSave = new Item(fromJoin.toString());
+    	ItemSave.items.add(itemToSave);
     }
 
-    
+    pointcut newobject(Object createdObject) :
+	    execution(Player.new(..)) 
+	        && this(createdObject);
+	before(Object createdObject) : newobject(createdObject) 
+	{
+		PlayerSave.players.add((Player)createdObject);
+	}
 }

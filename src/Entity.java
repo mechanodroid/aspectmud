@@ -9,8 +9,8 @@ public class Entity {
     	x=0;
     	y=0;
     }
-    public Entity(int x, int y, String description) {
-    	this.x = x;
+    public Entity(int incomingx, int y, String description) {
+    	x = incomingx;
     	this.y = y;
     	this.description = description;
     }

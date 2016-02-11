@@ -21,6 +21,9 @@ public class mud {
      }
 	public static void main(String[] args) {
 
+		
+		
+		Creature theMonster = new Creature(0,0,"A gross swampy monster.");
         // Load inventory
         ArrayList<Item> inventory = new ArrayList<>();
         init();
@@ -33,6 +36,11 @@ public class mud {
 
             String input = InputProcessor.getInput();
 
+            if(playerOne.getX()==theMonster.getX() &&
+            		playerOne.getY()==theMonster.getY())
+            {
+            	theMonster.printMonsterLocation();
+            }
             // Movement commands
             if (input.equals("n")) {
                 playerOne.GoNorth(room);
