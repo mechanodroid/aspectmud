@@ -23,6 +23,8 @@ public aspect Saving {
     //for most of these pointcuts we will extract information that must be saved
 	//then every once and a while we will call the overall save function for 
 	//all the data that's been checkpoint saved
+	
+	//the following pointcut saves the entire mud, but is no longer needed:
     /*pointcut afterSave() : execution(* *.set*(..)); 
     
     after() returning() : afterSave() { 
@@ -30,20 +32,38 @@ public aspect Saving {
         mud.newSave.writeRooms(mud.room, mud.WIDTH, mud.HEIGHT);
     }*/
 
+    pointcut location_setY(Player p1, int val): target(p1) && 
+    											args(val) &&
+    											call(void setY(int)) &&
+    													!within(Saving);
+
+
+
+    after(): location_setY(Player, int) { 	
+    	System.out.println("int argument"+(int)thisJoinPoint.getArgs()[0]); 
+		System.out.println("player argument"+((Player)thisJoinPoint.getTarget()).getName());
+		if( PlayerSave.players.get(0)!=null ) {
+			PlayerSave.players.get(0).setY((int)thisJoinPoint.getArgs()[0]);
+			//for player, take it and write out to a temp structure
+		}
+	}
     
     pointcut location_setX(Player p1, int val): target(p1) && 
     											args(val) &&
-    											call(void setX(int));
-    
+    											execution(void setX(int)) &&
+    													!within(Saving);
     
 
     after(): location_setX(Player, int) { 
         System.out.println("int argument"+(int)thisJoinPoint.getArgs()[0]); 
-        System.out.println("player argument"+((Player)thisJoinPoint.getTarget()).getName()); 
-        //for player, take it and write out to a temp structure, which
-        //will be eventually saved out. This is in place of:
-        // mud.newSave.writeRooms(mud.room, mud.WIDTH, mud.HEIGHT);
+        System.out.println("player argument"+((Player)thisJoinPoint.getTarget()).getName());
+        if( PlayerSave.players.get(0)!=null ) {
+        	PlayerSave.players.get(0).setX((int)thisJoinPoint.getArgs()[0]);
+            //for player, take it and write out to a temp structure
+        }
     }
+    
+    
     
     pointcut mud_(): execution(void mud.main(String[]));
     pointcut inventory_(): execution(void Inventory.checkItem(int, int, String,
