@@ -20,6 +20,12 @@ public class Entity {
     public void setX(int x){
     	this.x = x;
     }
+    public void setX(int x, boolean test) {
+    	this.x = x;
+    }
+    public void setY(int y, boolean test) {
+    	this.y = y;
+    }
     public void setY(int y){
     	this.y = y;
     }

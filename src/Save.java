@@ -33,7 +33,7 @@ public class Save {
 				   for (int j = 0; j < itemList.size(); j++) {
 					   Element itemNode = (Element) itemList.get(j);
 					   System.out.println("Item Name : " + itemNode.getText());
-					   rooms[posx][posy].items.add(new Item(itemNode.getText()));	
+					   rooms[posx][posy].setItems(new Item(itemNode.getText()));	
 				   }   
 				}
 
