@@ -3,7 +3,7 @@ import java.util.ArrayList;
 class Inventory {
 	
 	public static void checkItem(int x, int y, String item,
-            ArrayList<Item> inventory, Room[][] room) {
+           ArrayList<Item> inventory, Room[][] room) {
 		
 		// Check if item is a valid room item
 		boolean validRoomItem = false;
@@ -39,6 +39,9 @@ class Inventory {
 			System.out.println("I don't understand.");
 		}
     }
+	public static void addItem(ArrayList<Item> inventory, Item item) {
+		inventory.add(item);
+	}
 
     public static void print(ArrayList<Item> inventory) {
 

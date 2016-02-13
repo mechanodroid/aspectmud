@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mudState>
+  <roomname>
+    Bathroom
+    <item>toilet paper</item>
+    <item>magazine</item>
+  </roomname>
+  <roomname>
+    Kitchen
+    <item>pop tarts</item>
+    <item>soda</item>
+  </roomname>
+  <roomname>
+    Living
+    <item>remote</item>
+  </roomname>
+  <roomname>
+    Bedroom
+    <item>keys</item>
+    <item>flashlight</item>
+  </roomname>
+</mudState>

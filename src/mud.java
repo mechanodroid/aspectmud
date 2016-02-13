@@ -27,7 +27,7 @@ public class mud {
         // Load inventory
         ArrayList<Item> inventory = new ArrayList<>();
         init();
-        newSave.readRooms(room, WIDTH, HEIGHT);
+        newSave.readRooms(playerOne, inventory, room, WIDTH, HEIGHT);
         Rooms.print(room, playerOne);
         
         // Start game
@@ -84,6 +84,9 @@ public class mud {
             } else {
                 System.out.println("You can't do that.");
             }
+            newSave.updateRoomAndPlayerStates( playerOne, room, WIDTH, HEIGHT);
+            //^^ in a full featured game, this wouldn't be called every frame, 
+            //but for our game, the frames are controlled by player input so this is appropriate
         }
         System.exit(0);
 	}

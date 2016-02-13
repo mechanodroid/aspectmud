@@ -50,6 +50,14 @@ public class Room extends Entity {
     public void setItems(Item item) {
         this.items.add(item);
     }
+    
+    public void setItems(ArrayList<Item> items){
+    	this.items.clear();
+    	for(int i = 0; i<items.size(); i++) {
+    		Item curItem = items.get(i);
+    		this.items.add(curItem);
+    	}
+    }
 
     public void deleteItem(String item) {
     	for(int i = 0; i<items.size(); i++)

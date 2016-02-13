@@ -28,7 +28,7 @@ class ItemSave {
     	else {
     		for(int i = 0; i<itemsInRoom.size(); i++)
         	{
-        		if(itemsInRoom.get(i).getName()==item)
+        		if(itemsInRoom.get(i).getName().equals(item))
         		{
         			itemsInRoom.remove(i);
         		}
@@ -50,11 +50,9 @@ public aspect Saving {
 	//then every once and a while we will call the overall save function for 
 	//all the data that's been checkpoint saved
 	
-	//the following pointcut saves the entire mud, but is no longer needed:
+	//the following pointcut saves the entire mud, but is no longer needed, keeping it here in case we need something from it later:
     /*pointcut afterSave() : execution(* *.set*(..)); 
-    
     after() returning() : afterSave() { 
-        System.out.println("save now!"); 
         mud.newSave.writeRooms(mud.room, mud.WIDTH, mud.HEIGHT);
     }*/
 	

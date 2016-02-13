@@ -1,7 +1,10 @@
 import java.io.FileWriter;
+import java.util.Set;
+import java.util.Iterator;
 import java.io.IOException;
 import java.io.File;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.jdom2.Attribute;
 import org.jdom2.Element;
@@ -12,7 +15,62 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.JDOMException;
 
 public class Save {
-	public void readRooms(Room[][] rooms, int WIDTH, int HEIGHT)	{
+	public void updateRooms(Player player, ArrayList<Item> inv, Room[][] rooms, int WIDTH, int HEIGHT) {
+		SAXBuilder builder = new SAXBuilder();
+		  File xmlFile = new File("mudState.xml");
+		  try {
+
+				Document document = (Document) builder.build(xmlFile);
+				Element rootNode = document.getRootElement();
+				List list = rootNode.getChildren("roomname");
+				for (int i = 0; i < list.size(); i++) {
+				   ArrayList<Item> newItems = new ArrayList<Item>();
+				   Element node = (Element) list.get(i);
+				   List itemList = node.getChildren("item");
+				   for (int j = 0; j < itemList.size(); j++) {
+					   Element itemNode = (Element) itemList.get(j);
+					   newItems.add(new Item(itemNode.getText()));
+				   }
+				   for(int i2 = 0; i2 < HEIGHT; i2++) {
+						for(int j2 = 0; j2 < WIDTH; j2++) {
+							System.out.println("in update from state:"+node.getTextTrim()+":"+rooms[i2][j2].getName().trim());
+							if(rooms[i2][j2].getName().trim().equals(node.getTextTrim())) {
+								rooms[i2][j2].setItems(newItems);
+							}
+						}
+					}
+				}
+				List listInv = rootNode.getChildren("inventory");
+				if(!listInv.isEmpty()) {
+					inv.clear();
+					Element node = (Element)listInv.get(0);
+				    List itemList = node.getChildren("item");
+				    for (int j = 0; j < itemList.size(); j++) {
+						   Element itemNode = (Element) itemList.get(j);
+						   inv.add(new Item(itemNode.getText()));
+					}
+				}
+				List players = rootNode.getChildren("player");
+				if(!players.isEmpty()) {
+					Element node = (Element)players.get(0);
+					List xList = node.getChildren("x");
+					List yList = node.getChildren("y");
+					if(!xList.isEmpty() && !yList.isEmpty()) {
+						Element xElement = (Element)xList.get(0);
+						Element yElement = (Element)yList.get(0);
+						player.set(Integer.parseInt(xElement.getTextTrim()),
+									Integer.parseInt(yElement.getTextTrim()));
+					}
+				}
+				
+
+			  } catch (IOException io) {
+				System.out.println(io.getMessage());
+			  } catch (JDOMException jdomex) {
+		      System.out.println(jdomex.getMessage());
+		  }
+	}
+	public void readRooms(Player player, ArrayList<Item> inv, Room[][] rooms, int WIDTH, int HEIGHT)	{
 		  SAXBuilder builder = new SAXBuilder();
 		  File xmlFile = new File("mud.xml");
 		  try {
@@ -40,8 +98,54 @@ public class Save {
 			  } catch (IOException io) {
 				System.out.println(io.getMessage());
 			  } catch (JDOMException jdomex) {
-				System.out.println(jdomex.getMessage());
-			  }
+			  System.out.println(jdomex.getMessage());
+		  }
+		  updateRooms(player, inv, rooms, WIDTH, HEIGHT);
+	}
+	public void updateRoomAndPlayerStates(Player player, Room[][] rooms, int WIDTH, int HEIGHT) {
+		try {
+			Element mud1 = new Element("mudState");
+			Document doc = new Document(mud1);
+			Set<Room> itemKeys = ItemSave.items.keySet();
+		    Iterator<Room> i = itemKeys.iterator();
+			while(i.hasNext())
+			{
+				Room curRoom = i.next();
+	            Element room = new Element("roomname").setText(curRoom.getName());
+	            ArrayList<Item> items = ItemSave.items.get(curRoom);
+	            for(int j=0; j<items.size(); j++)
+	            {
+	            	Item curItem = items.get(j);
+	            	Element curItemElement = new Element("item").setText(curItem.getName());
+	            	room.addContent(curItemElement);
+	            }
+                doc.getRootElement().addContent(room);
+			}  
+            Element inv = new Element("inventory").setText("playerOne");
+            for(int j = 0; j<InventorySave.inventory.size(); j++) {
+            	Item curItem = InventorySave.inventory.get(j);
+            	Element curItemElement = new Element("item").setText(curItem.getName());
+            	inv.addContent(curItemElement);
+            }
+            doc.getRootElement().addContent(inv);
+            Element pl = new Element("player").setText("playerOne");
+           	Element xElement = new Element("x").setText(Integer.toString(player.getX()));
+           	Element yElement = new Element("y").setText(Integer.toString(player.getY()));
+           	pl.addContent(yElement);
+           	pl.addContent(xElement);
+           	doc.getRootElement().addContent(pl);
+            
+			// new XMLOutputter().output(doc, System.out);
+			XMLOutputter xmlOutput = new XMLOutputter();
+	
+			// display nice nice
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(doc, new FileWriter("mudState.xml"));
+	
+			System.out.println("Mud File Saved!");
+		} catch (IOException io) {
+			System.out.println(io.getMessage());
+		}
 	}
 	public void writeRooms(Room[][] rooms, int WIDTH, int HEIGHT) {
 		try {
@@ -83,41 +187,7 @@ public class Save {
 	}
 	public void testWrite()
 	{
-		try {
-
-			Element company = new Element("company");
-			Document doc = new Document(company);
-			//doc.setRootElement(company);
-
-			Element staff = new Element("staff");
-			staff.setAttribute(new Attribute("id", "1"));
-			staff.addContent(new Element("firstname").setText("yong"));
-			staff.addContent(new Element("lastname").setText("mook kim"));
-			staff.addContent(new Element("nickname").setText("mkyong"));
-			staff.addContent(new Element("salary").setText("199999"));
-
-			doc.getRootElement().addContent(staff);
-
-			Element staff2 = new Element("staff");
-			staff2.setAttribute(new Attribute("id", "2"));
-			staff2.addContent(new Element("firstname").setText("low"));
-			staff2.addContent(new Element("lastname").setText("yin fong"));
-			staff2.addContent(new Element("nickname").setText("fong fong"));
-			staff2.addContent(new Element("salary").setText("188888"));
-
-			doc.getRootElement().addContent(staff2);
-
-			// new XMLOutputter().output(doc, System.out);
-			XMLOutputter xmlOutput = new XMLOutputter();
-
-			// display nice nice
-			xmlOutput.setFormat(Format.getPrettyFormat());
-			xmlOutput.output(doc, new FileWriter("e:\\file.xml"));
-
-			System.out.println("File Saved!");
-		  } catch (IOException io) {
-			System.out.println(io.getMessage());
-		  }
-		}
+		
 	}
+}
 
